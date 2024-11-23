@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!--This to lines are added to separate build process between .NET & .NET Standard-->
+    <BaseOutputPath>$(MSBuildProjectDirectory)/obj/net20/$(MSBuildProjectName)/bin</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildProjectDirectory)/obj/net20/$(MSBuildProjectName)/obj</BaseIntermediateOutputPath>
+    <Version Condition="'$(Version)' == ''">1.0.89.0</Version>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F5D5D068-01A6-4394-A729-95DE0D49D631}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Plugin.PortClient</RootNamespace>
+    <AssemblyName>Plugin.PortClient</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Plugin.PortClient\</OutputPath>
+    <DefineConstants>TRACE;WIN</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Plugin.PortClient\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;WIN</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ObjectListView, Version=2.9.6.0, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>..\packages\ObjectListView.2.9.6\lib\net20\ObjectListView.dll</HintPath>
+    </Reference>
+    <Reference Include="SAL.Flatbed, Version=1.2.9.2, Culture=neutral, PublicKeyToken=a8ac5fc45c3adb8d, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAL.Flatbed.1.2.9.2\lib\net20\SAL.Flatbed.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SAL.Windows, Version=1.2.9.2, Culture=neutral, PublicKeyToken=a8ac5fc45c3adb8d, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAL.Windows.1.2.9.2\lib\net20\SAL.Windows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Bll.Shared\BllBase.cs">
+      <Link>Data\BllBase.cs</Link>
+    </Compile>
+    <Compile Include="..\WinForms.Shared\SearchGrid\SearchGrid.cs">
+      <Link>UI\SearchGrid.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\WinForms.Shared\SearchGrid\SearchGrid.designer.cs">
+      <Link>UI\SearchGrid.designer.cs</Link>
+      <DependentUpon>SearchGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\GroupDto.cs" />
+    <Compile Include="Data\ObjectPropertyParser.cs" />
+    <Compile Include="PortTest\PortTestConsumer.cs" />
+    <Compile Include="PortTest\PortTestDto.cs" />
+    <Compile Include="PortTest\PortTestEventArgs.cs" />
+    <Compile Include="Constant.cs" />
+    <Compile Include="Data\ItemDto.cs" />
+    <Compile Include="Data\PortsDto.cs" />
+    <Compile Include="Data\ServerDto.cs" />
+    <Compile Include="Data\TargetsBll.cs" />
+    <Compile Include="Data\TargetsDataSet.cs">
+      <DependentUpon>TargetsDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Data\TargetsDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TargetsDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="PanelPortTestClient.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PanelPortTestClient.Designer.cs">
+      <DependentUpon>PanelPortTestClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelPortTestClientSettings.cs" />
+    <Compile Include="PluginSettings.cs" />
+    <Compile Include="PluginWindows.cs" />
+    <Compile Include="PortTest\PortTestInstance.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ServerListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\WinForms.Shared\SearchGrid\SearchGrid.resx">
+      <Link>UI\SearchGrid.resx</Link>
+      <DependentUpon>SearchGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelPortTestClient.resx">
+      <DependentUpon>PanelPortTestClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\TargetsDataSet.xsc">
+      <DependentUpon>TargetsDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Data\TargetsDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TargetsDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Data\TargetsDataSet.xss">
+      <DependentUpon>TargetsDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Properties\WindowCaption.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="BeforeBuild">
+    <ItemGroup>
+      <AssemblyAttributes Include="AssemblyVersion">
+        <_Parameter1>$(Version)</_Parameter1>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyFileVersion">
+        <_Parameter1>$(Version)</_Parameter1>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyInformationalVersion">
+        <_Parameter1>$(Version)</_Parameter1>
+      </AssemblyAttributes>
+    </ItemGroup>
+    <MakeDir Directories="$(IntermediateOutputPath)" />
+    <WriteCodeFragment Language="C#" OutputFile="$(IntermediateOutputPath)Version.cs" AssemblyAttributes="@(AssemblyAttributes)" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)Version.cs" />
+    </ItemGroup>
+  </Target>
+</Project>
