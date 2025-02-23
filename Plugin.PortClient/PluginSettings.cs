@@ -11,7 +11,7 @@ namespace Plugin.PortClient
 		private static class Constants
 		{
 			public const String MessageFormat = "{IpAddress}:{Port} {ServerComments}{PortComments} {Status}";
-			/// <summary>Наименование файла, в котором сохраняются все настройки по проекту</summary>
+			/// <summary>The name of the file in which all project settings are saved</summary>
 			public const String ProjectFileName = "ServersSettings.xml";
 			internal const String Project = "Project";
 		}
@@ -70,14 +70,14 @@ namespace Plugin.PortClient
 			}
 		}
 
-		/// <summary>Отображаемые колонки в списке</summary>
+		/// <summary>Displayed columns in the list</summary>
 		[Browsable(false)]
 		public String ColumnVisible { get; set; }
 
 		internal PluginSettings(PluginWindows plugin)
 			=> this._plugin = plugin;
 
-		/// <summary>Внутренний проект</summary>
+		/// <summary>Internal project</summary>
 		internal TargetsBll LoadProject()
 		{
 			TargetsBll result = null;

@@ -10,7 +10,7 @@ namespace Plugin.PortClient
 		public String ProjectFileName
 		{
 			get => this._projectFileName;
-			set => this.SetField(ref this._projectFileName, value, nameof(ProjectFileName));
+			set => this.SetField(ref this._projectFileName, value, nameof(this.ProjectFileName));
 		}
 
 		internal void SetValues(String projectFileName)
