@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using Plugin.PortClient.Data;
 using Plugin.PortClient.PortTest;
 using SAL.Flatbed;
@@ -10,21 +11,20 @@ namespace Plugin.PortClient
 {
 	public class PluginWindows : IPlugin, IPluginSettings<PluginSettings>
 	{
-		#region Fields
 		private PluginSettings _settings;
-		private TraceSource _trace;
-		private Dictionary<String, DockState> _documentTypes;
-		#endregion Fields
 
-		#region Properties
+		private TraceSource _trace;
+
+		private Dictionary<String, DockState> _documentTypes;
+
 		internal TraceSource Trace => this._trace ?? (this._trace = PluginWindows.CreateTraceSource<PluginWindows>());
 
 		internal IHostWindows HostWindows { get; }
 
-		/// <summary>Настройки для взаимодействия из хоста</summary>
+		/// <summary>Settings for interaction from the host</summary>
 		Object IPluginSettings.Settings => this.Settings;
 
-		/// <summary>Настройки для взаимодействия из плагина</summary>
+		/// <summary>Settings for interaction from the plugin</summary>
 		public PluginSettings Settings
 		{
 			get
@@ -37,9 +37,11 @@ namespace Plugin.PortClient
 				return this._settings;
 			}
 		}
-		
+
 		private IMenuItem MenuTest { get; set; }
+
 		private IMenuItem MenuNetworkTest { get; set; }
+
 		private IMenuItem MenuPortTest { get; set; }
 
 		private Dictionary<String, DockState> DocumentTypes
@@ -55,19 +57,18 @@ namespace Plugin.PortClient
 				return this._documentTypes;
 			}
 		}
-		#endregion Properties
 
 		public PluginWindows(IHostWindows hostWindows)
 			=> this.HostWindows = hostWindows ?? throw new ArgumentNullException(nameof(hostWindows));
 
-		/// <summary>Получить список всех хостов в настройках</summary>
-		/// <returns>Список хостов в настройках</returns>
+		/// <summary>Get a list of all hosts in the settings</summary>
+		/// <returns>List of hosts in the settings</returns>
 		public IEnumerable<String> GetHostAddress()
-			=> this.Settings.LoadProject().GetHostAddress();
+		=> this.Settings.LoadProject().GetHostAddress();
 
-		/// <summary>Проверить все порты из настроек у определённого хоста</summary>
-		/// <param name="hostAddress">Хост для проверки</param>
-		/// <returns>Один из портов на сервере из настроек сервера - открыт</returns>
+		/// <summary>Check all ports from the settings for a specific host</summary>
+		/// <param name="hostAddress">Host to check</param>
+		/// <returns>One of the ports on the server from the server settings is open</returns>
 		public Boolean CheckPorts(String hostAddress)
 		{
 			if(String.IsNullOrEmpty(hostAddress))
@@ -76,7 +77,7 @@ namespace Plugin.PortClient
 			TargetsBll project = this.Settings.LoadProject();
 			TargetsDataSet.ServerRow serverRow = project.GetServerRow(hostAddress);
 			if(serverRow == null)
-				throw new ArgumentNullException(nameof(serverRow));
+				throw new InvalidOperationException($"The {nameof(serverRow)} is not found by specified {nameof(hostAddress)}");
 
 			Boolean result = true;
 			PortTestInstance instance = new PortTestInstance();
@@ -116,7 +117,7 @@ namespace Plugin.PortClient
 
 			this.MenuPortTest = this.MenuNetworkTest.Create("Port Test Client");
 			this.MenuPortTest.Name = "Tools.Test.Network.PortTestClient";
-			this.MenuPortTest.Click += (sender, e) => { this.CreateWindow(typeof(PanelPortTestClient).ToString(), true); };
+			this.MenuPortTest.Click += (sender, e) => this.CreateWindow(typeof(PanelPortTestClient).ToString(), true);
 			this.MenuNetworkTest.Items.AddRange(new IMenuItem[] { this.MenuPortTest, });
 			return true;
 		}

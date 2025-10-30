@@ -44,12 +44,12 @@ namespace Plugin.PortClient.Data
 					UInt16 checkMin = portsArr[0] == String.Empty ? UInt16.MinValue : UInt16.Parse(portsArr[0]);
 					UInt16 checkMax = portsArr[1] == String.Empty ? UInt16.MaxValue : UInt16.Parse(portsArr[1]);
 					if(checkMin >= checkMax)
-						throw new ArgumentException("Минимальное значение должно быть больше максимального. Порты: " + part);
+						throw new ArgumentException("The minimum value must be greater than the maximum. Ports: " + part);
 					result.Add(String.Format("{0}-{1}",
 						checkMin == UInt16.MinValue ? String.Empty : checkMin.ToString(),
 						checkMax == UInt16.MaxValue ? String.Empty : checkMax.ToString()));
 				} else
-					throw new ArgumentException("Невозможно разобрать значение. Порты: " + part);
+					throw new ArgumentException("Unable to parse value. Ports: " + part);
 			}
 
 			return String.Join(",", result.ToArray());

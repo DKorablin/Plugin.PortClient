@@ -10,8 +10,8 @@ namespace Plugin.PortClient.Data
 	{
 		public event EventHandler<EventArgs> OnFileChanged;
 
-		/// <summary>Создать экземпляр настроек и загрузить настройки из провайдера плагинов</summary>
-		/// <param name="plugin">Плагин</param>
+		/// <summary>Create a settings instance and load settings from the plugin provider</summary>
+		/// <param name="plugin">Plugin</param>
 		public TargetsBll()
 			: base(0)
 		{ }
@@ -24,7 +24,7 @@ namespace Plugin.PortClient.Data
 			: base(filePath, 0)
 			=> this.Load(false);
 
-		public override void Load(bool isReload)
+		public override void Load(Boolean isReload)
 		{
 			base.Load(isReload);
 			if(isReload)
@@ -52,20 +52,20 @@ namespace Plugin.PortClient.Data
 			}
 		}
 
-		/// <summary>Получить список всех хостов в настройках</summary>
-		/// <returns>Список хостов в настройках</returns>
+		/// <summary>Get a list of all hosts in the settings</summary>
+		/// <returns>List of hosts in the settings</returns>
 		public IEnumerable<String> GetHostAddress()
 			=> base.DataSet.Server.Select(p => p.HostAddress);
 
-		/// <summary>Получить ряд информации о сервере по идентификатору сервера</summary>
-		/// <param name="serverId">Идентификатор сервреа</param>
-		/// <returns>Ряд сервера</returns>
+		/// <summary>Get server information by server ID</summary>
+		/// <param name="serverId">Server ID</param>
+		/// <returns>Server ID</returns>
 		public TargetsDataSet.ServerRow GetServerRow(Int32 serverId)
 			=> base.DataSet.Server.FirstOrDefault(p => p.ServerId == serverId);
 
-		/// <summary>Получить ряд информации о серверу по адресу сервера</summary>
-		/// <param name="hostAddress">Адрес сервера</param>
-		/// <returns>Ряд сервера</returns>
+		/// <summary>Get a set of server information by server address</summary>
+		/// <param name="hostAddress">Server Address</param>
+		/// <returns>Server row</returns>
 		public TargetsDataSet.ServerRow GetServerRow(String hostAddress)
 		{
 			if(String.IsNullOrEmpty(hostAddress))
@@ -88,10 +88,10 @@ namespace Plugin.PortClient.Data
 			return result;
 		}
 
-		/// <summary>Поменять данные по серверу</summary>
-		/// <param name="serverId">Идентификатор сервера или null, если новая</param>
-		/// <param name="hostAddress">Адрес сервера</param>
-		/// <returns>Данные по ряду добавленного в датасет</returns>
+		/// <summary>Change server data</summary>
+		/// <param name="serverId">Server ID or null if new</param>
+		/// <param name="hostAddress">Server address</param>
+		/// <returns>Data for the row added to the dataset</returns>
 		public TargetsDataSet.ServerRow ModifyServerRow(TargetsDataSet.GroupRow groupRow, TargetsDataSet.ServerRow serverRow, String hostAddress)
 		{
 			String[] hostAddressParts = hostAddress.Split(':');
@@ -102,7 +102,7 @@ namespace Plugin.PortClient.Data
 			if(hostAddressParts.Length > 1 && UInt16.TryParse(hostAddressParts[1], out port)
 				&& IPAddress.TryParse(hostAddressParts[0], out ip)
 				&& ip.AddressFamily == AddressFamily.InterNetwork)
-				hostAddress = hostAddressParts[0];//Пытаюсь распарсить IP адрес с портом. Пример - 127.0.0.1:80
+				hostAddress = hostAddressParts[0];//I'm trying to parse an IP address with a port. Example: 127.0.0.1:80
 			else
 				ip = null;*/
 

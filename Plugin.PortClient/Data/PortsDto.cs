@@ -57,7 +57,7 @@ namespace Plugin.PortClient.Data
 			set => this.Row.CommentsI = value;
 		}
 
-		
+
 		public PortsDto(ServerDto server)
 			=> this.Server = server;
 

@@ -57,8 +57,8 @@ namespace Plugin.PortClient
 			this.Window.Caption = String.Join(" - ", captions.ToArray());
 		}
 
-		/// <summary>Загрузить проект на форму</summary>
-		/// <param name="filePath">Путь к файлу или загрузка из локального хранилища</param>
+		/// <summary>Upload project to form</summary>
+		/// <param name="filePath">Path to file or upload from local storage</param>
 		private void LoadProject()
 		{
 			String filePath = this.Settings.ProjectFileName;
@@ -113,7 +113,7 @@ namespace Plugin.PortClient
 			this.Plugin.Trace.TraceEvent(TraceEventType.Information, args.IsConnected ? 1 : 0, message);
 		}
 
-		private void lvServers_TestFinished(Object sender,EventArgs args)
+		private void lvServers_TestFinished(Object sender, EventArgs args)
 		{
 			base.Cursor = Cursors.Default;
 			tsbnLaunch.Checked = false;
@@ -130,7 +130,7 @@ namespace Plugin.PortClient
 				try
 				{
 					pgProperties.SelectedObject = node;
-				}catch(SocketException exc)
+				} catch(SocketException exc)
 				{
 					this.Plugin.Trace.TraceData(TraceEventType.Warning, 10, exc);
 				}
@@ -153,7 +153,7 @@ namespace Plugin.PortClient
 		private void tsbnServerAdd_DropDownItemClicked(Object sender, ToolStripItemClickedEventArgs e)
 		{//TODO: ObjectListView don't work with .NET Core
 			if(lvServers.SelectedObject != null && lvServers.IsCellEditing)
-				return;//Если узел уже редактируется
+				return;//If the node is already being edited
 
 			if(e.ClickedItem == tsmiAddGroup)
 				lvServers.AddNewNode(ItemDto.TreeImageList.Folder);
@@ -315,11 +315,7 @@ namespace Plugin.PortClient
 					return;
 				if(fileName == this.Settings.ProjectFileName)
 					this.Settings.ProjectFileName = fileName;
-				else
-					if(this.Plugin.CreateWindow(
-						typeof(PanelPortTestClient).ToString(),
-						true,
-						new PanelPortTestClientSettings() { ProjectFileName = fileName, }) == null)
+				else if(this.Plugin.CreateWindow(typeof(PanelPortTestClient).ToString(), true, new PanelPortTestClientSettings() { ProjectFileName = fileName, }) == null)
 					this.Plugin.Trace.TraceEvent(TraceEventType.Warning, 1, "Error opening window");
 			} else if(e.ClickedItem == tsmiProjectExport)
 				lvServers.SaveProjectToFile(true);

@@ -17,14 +17,14 @@ namespace Plugin.PortClient.PortTest
 
 			public abstract TimeSpan Elapsed { get; }
 
-			public CallbackBase(PortTestDto dto)
+			protected CallbackBase(PortTestDto dto)
 				=> this.Dto = dto;
 
 			public abstract Boolean FinishTest();
 
 		}
 
-		private class PingCallback : CallbackBase
+		private sealed class PingCallback : CallbackBase
 		{
 			public class FakeState : IAsyncResult
 			{
@@ -38,7 +38,7 @@ namespace Plugin.PortClient.PortTest
 			}
 
 			private PingReply _reply;
-			private Stopwatch _elapsed = new Stopwatch();
+			private readonly Stopwatch _elapsed = new Stopwatch();
 			private AsyncCallback _callback;
 
 			private Ping Pong { get; }
@@ -52,8 +52,8 @@ namespace Plugin.PortClient.PortTest
 			public void BeginConnect(AsyncCallback callback)
 			{
 				this._callback = callback;
-				this.Pong.PingCompleted += Pong_PingCompleted;
-				
+				this.Pong.PingCompleted += this.Pong_PingCompleted;
+
 				this._elapsed.Start();
 				this.Pong.SendAsync(base.Dto.Address,
 					base.Dto.ConnectTimeout.GetValueOrDefault(5000),//5 seconds same as ping.exe
@@ -78,7 +78,7 @@ namespace Plugin.PortClient.PortTest
 		private class SocketCallback : CallbackBase
 		{
 			private Boolean _inProgress = true;
-			private Stopwatch _elapsed = new Stopwatch();
+			private readonly Stopwatch _elapsed = new Stopwatch();
 			private Socket Socket { get; }
 			public override TimeSpan Elapsed => this._elapsed.Elapsed;
 
@@ -114,14 +114,14 @@ namespace Plugin.PortClient.PortTest
 		}
 
 		private volatile Boolean _cancellationPending = false;
-		
-		public Boolean IsSended { get; set; } = false;
+
+		public Boolean IsSent { get; set; } = false;
 
 		public ManualResetEvent FinishedEvent { get; private set; }
 
 		public Int32 TestsCount => this._instances.Count;
 
-		private Object _instanceLock = new Object();
+		private readonly Object _instanceLock = new Object();
 
 		private Dictionary<PortTestDto, SocketCallback> _instances;
 
@@ -136,7 +136,7 @@ namespace Plugin.PortClient.PortTest
 
 		public void Reset()
 		{
-			this.IsSended = false;
+			this.IsSent = false;
 			this._instances = new Dictionary<PortTestDto, SocketCallback>();
 			this.FinishedEvent.Reset();
 		}
@@ -180,7 +180,7 @@ namespace Plugin.PortClient.PortTest
 			{
 				SocketCallback payload = new SocketCallback(dto);
 				this._instances.Add(dto, payload);
-				payload.BeginConnect(CheckPortAscyncCallback);
+				payload.BeginConnect(this.CheckPortAsyncCallback);
 				isSuccess = true;
 			} catch(SocketException exc)
 			{
@@ -190,7 +190,7 @@ namespace Plugin.PortClient.PortTest
 			return isSuccess;
 		}
 
-		private void CheckPortAscyncCallback(IAsyncResult result)
+		private void CheckPortAsyncCallback(IAsyncResult result)
 		{
 			if(this._cancellationPending)
 				return;

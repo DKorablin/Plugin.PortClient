@@ -27,7 +27,7 @@ namespace Plugin.PortClient.Data
 			get
 			{
 				if(this._servers == null && this.Row != null)
-					this._servers = new List<ServerDto>(Array.ConvertAll(this.Row.GetServerRows(), (server) => { return new ServerDto(this, server); }));
+					this._servers = new List<ServerDto>(Array.ConvertAll(this.Row.GetServerRows(), (server) => new ServerDto(this, server)));
 				return this._servers;
 			}
 		}

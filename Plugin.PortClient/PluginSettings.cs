@@ -91,7 +91,7 @@ namespace Plugin.PortClient
 
 		internal void SaveProject(TargetsBll project)
 		{
-			if(project.IsRowExists==false)
+			if(!project.IsRowExists)
 				this._plugin.HostWindows.Plugins.Settings(this._plugin).RemoveAssemblyBlob(Constants.ProjectFileName);
 			else
 				using(MemoryStream stream = new MemoryStream())

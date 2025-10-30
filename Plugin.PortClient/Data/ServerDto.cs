@@ -23,7 +23,7 @@ namespace Plugin.PortClient.Data
 			get
 			{
 				if(this._ports == null && this.Row != null)
-					this._ports = new List<PortsDto>(Array.ConvertAll(this.Row.GetPortsRows(), (port) => { return new PortsDto(this, port); }));
+					this._ports = new List<PortsDto>(Array.ConvertAll(this.Row.GetPortsRows(), (port) => new PortsDto(this, port)));
 				return this._ports;
 			}
 		}
@@ -37,7 +37,7 @@ namespace Plugin.PortClient.Data
 
 		[Category("Connection")]
 		public IPAddress[] IpAddressArr
-			=> this.Row?.IpAddresArr;
+			=> this.Row?.IpAddressArr;
 
 		[Category("Connection")]
 		[DefaultValue(System.Net.Sockets.AddressFamily.InterNetwork)]

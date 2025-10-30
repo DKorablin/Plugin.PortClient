@@ -73,7 +73,8 @@ namespace Plugin.PortClient.UI
 				IsEditable = false,
 				UseInitialLetterForGroup = false,
 				WordWrap = false,
-				AspectGetter = (item) => {
+				AspectGetter = (item) =>
+				{
 					return item is ServerDto server
 						? server.Description
 						: item is PortsDto port
@@ -171,11 +172,8 @@ namespace Plugin.PortClient.UI
 				switch(args.DropTargetLocation)
 				{
 				case DropTargetLocation.None:
-					if(target == null)
-					{
-						if(source.All(s => { return s is ServerDto; }))
-							args.Effect = DragDropEffects.Move;
-					}
+					if(target == null && source.All(s => s is ServerDto))
+						args.Effect = DragDropEffects.Move;
 					break;
 				case DropTargetLocation.Item:
 					if(target is GroupDto group)
@@ -202,14 +200,6 @@ namespace Plugin.PortClient.UI
 			{ ItemDto.StateType.Success, Color.Green },
 		};
 
-		protected override void HandleApplicationIdleResizeColumns(Object sender, EventArgs e)
-		{
-			/*if(base.IsCellEditing)//This logic is not working. Because when we started to edit cell this event cancels it
-				base.CancelCellEdit();*/
-
-			base.HandleApplicationIdleResizeColumns(sender, e);
-		}
-
 		protected override void OnFormatRow(FormatRowEventArgs args)
 		{
 			if(args.Model is ServerDto server)
@@ -232,7 +222,7 @@ namespace Plugin.PortClient.UI
 		{
 			ItemDto rowObject = (ItemDto)e.RowObject;
 			String newValue = (String)e.NewValue;
-			if(e.Cancel == true)
+			if(e.Cancel)
 			{
 				if(rowObject is PortsDto port && port.Row == null)
 					port.Server.Ports.Remove(port);
@@ -285,7 +275,7 @@ namespace Plugin.PortClient.UI
 				e.Control.ForeColor = Color.Red;
 				throw;
 			} catch(Exception)
-			{//Не удалось добавить ноду. Пытаемся оставить старую ноду с текстом
+			{//Failed to add node. Trying to keep the old text node.
 				e.Cancel = true;
 				e.Control.ForeColor = Color.Red;
 				throw;
@@ -348,13 +338,13 @@ namespace Plugin.PortClient.UI
 						this._instance.CheckPorts(server.Row);
 					else if(item is PortsDto ports)
 						this._instance.CheckPorts(ports.Server.Row, ports.Row);
-				}catch(SocketException exc)
+				} catch(SocketException exc)
 				{
 					this.Plugin.Trace.TraceData(TraceEventType.Error, 6, exc);
 					item.State = ItemDto.StateType.Error;
 				}
 			}
-			this._instance.IsSended = true;
+			this._instance.IsSent = true;
 			return true;
 		}
 
@@ -450,7 +440,7 @@ namespace Plugin.PortClient.UI
 		}
 
 		/// <summary>Save all project data to file on file system</summary>
-		/// <param name="showSaveDialog">Show save dialog or silently save project to previosly choosed path</param>
+		/// <param name="showSaveDialog">Show save dialog or silently save project to previously chosen path</param>
 		public void SaveProjectToFile(Boolean showSaveDialog)
 		{
 			String filePath = this.FilePath;
@@ -580,7 +570,7 @@ namespace Plugin.PortClient.UI
 			else if(nodes.Length > 1)
 			{
 				isMultiDelete = true;
-				if(MessageBox.Show("Are you shure you want to remove selected nodes?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+				if(MessageBox.Show("Are you sure you want to remove selected nodes?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 					return;
 			}
 
@@ -590,24 +580,23 @@ namespace Plugin.PortClient.UI
 					return;
 				else if(node is ServerDto server)
 				{
-					if(isMultiDelete || MessageBox.Show("Are you shure you want to remove selected server node and all ports?", "Server: " + server.HostAddress, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+					if(isMultiDelete || MessageBox.Show("Are you sure you want to remove selected server node and all ports?", "Server: " + server.HostAddress, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 					{
 						server.Group?.Servers.Remove(server);
 						this.Project.RemoveServer(server.Row);
 					}
 				} else if(node is PortsDto ports)
 				{
-					if(isMultiDelete || MessageBox.Show("Are you shure you want to remove selected port range?", "Ports: " + ports.Ports, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+					if(isMultiDelete || MessageBox.Show("Are you sure you want to remove selected port range?", "Ports: " + ports.Ports, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 					{
 						ports.Server.Ports.Remove(ports);
 						this.Project.RemovePort(ports.Row);
 					}
-				}else if(node is GroupDto group)
+				} else if(node is GroupDto group)
 				{
-					if(isMultiDelete || MessageBox.Show("Are you shure you want to remove selected group?", "Group: " + group.Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+					if(isMultiDelete || MessageBox.Show("Are you sure you want to remove selected group?", "Group: " + group.Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 						this.Project.RemoveGroup(group.Row);
-				}
-				else
+				} else
 					throw new NotSupportedException();
 
 				this.RemoveObject(node);

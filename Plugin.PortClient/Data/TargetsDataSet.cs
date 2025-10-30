@@ -7,7 +7,7 @@ using Plugin.PortClient.PortTest;
 
 namespace Plugin.PortClient.Data
 {
-	/// <summary>Данные о целевых серверах</summary>
+	/// <summary>Data about target servers</summary>
 	internal partial class TargetsDataSet
 	{
 		partial class GroupDataTable
@@ -69,11 +69,11 @@ namespace Plugin.PortClient.Data
 
 		partial class ServerDataTable
 		{
-			/// <summary>Поменять данные по серверу</summary>
+			/// <summary>Change server data</summary>
 			/// <param name="groupRow">Parent group where server belongs</param>
-			/// <param name="serverRow">Идентификатор сервера или null, если новая</param>
-			/// <param name="serverAddress">Адрес сервера</param>
-			/// <returns>Данные по ряду добавленного в датасет</returns>
+			/// <param name="serverRow">Server ID or null if new</param>
+			/// <param name="serverAddress">Server address</param>
+			/// <returns>Data for the row added to the dataset</returns>
 			public TargetsDataSet.ServerRow ModifyServerRow(TargetsDataSet.GroupRow groupRow, TargetsDataSet.ServerRow serverRow, String serverAddress)
 			{
 				if(String.IsNullOrEmpty(serverAddress))
@@ -94,7 +94,7 @@ namespace Plugin.PortClient.Data
 			}
 		}
 
-		/// <summary>Данные</summary>
+		/// <summary>Data</summary>
 		partial class ServerRow
 		{
 			public Int32? GroupIdI
@@ -109,14 +109,14 @@ namespace Plugin.PortClient.Data
 				}
 			}
 
-			public IPAddress[] IpAddresArr
+			public IPAddress[] IpAddressArr
 			{
 				get
 				{//TODO: SocketException: No such host is known
 					IPAddress[] addr = Dns.GetHostAddresses(this.HostAddress);
 					return this.AddressFamilyI == null
 						? addr
-						: Array.FindAll(addr, (item) => { return item.AddressFamily == this.AddressFamilyI; });
+						: Array.FindAll(addr, item => item.AddressFamily == this.AddressFamilyI);
 				}
 			}
 
@@ -151,18 +151,18 @@ namespace Plugin.PortClient.Data
 					: new TargetsDataSet.PortsRow[] { portRow };
 
 				if(rows.Length == 0)//Server does not have specified ports
-					foreach(IPAddress addr in this.IpAddresArr)
-						foreach(UInt16 port in Enumerable.Range(0, UInt16.MaxValue))/*TODO: Подумать как красиво переписать на extension*/
-							yield return new PortTestDto(this, null, addr, port);
-				else//Не указан конкретный ряд, берём все ряды для сервера
+					foreach(IPAddress item in this.IpAddressArr)
+						foreach(UInt16 port in Enumerable.Range(0, UInt16.MaxValue))/*TODO: Think about how to beautifully rewrite it to extension*/
+							yield return new PortTestDto(this, null, item, port);
+				else//No specific row is specified, we take all rows for the server
 					foreach(TargetsDataSet.PortsRow row in rows)
-						foreach(IPAddress addr in this.IpAddresArr)
+						foreach(IPAddress item in this.IpAddressArr)
 							foreach(UInt16 port in row.GetPorts())
-								yield return new PortTestDto(this, row, addr, port);
+								yield return new PortTestDto(this, row, item, port);
 			}
 		}
 
-		/// <summary>Данные о портах мониторинга сервера</summary>
+		/// <summary>Data on server monitoring ports</summary>
 		partial class PortsRow
 		{
 			/// <summary>banana banana banana</summary>
@@ -178,7 +178,7 @@ namespace Plugin.PortClient.Data
 				}
 			}
 
-			/// <summary>Тип протокола по которому будем подключаться</summary>
+			/// <summary>The type of protocol we will use to connect</summary>
 			public ProtocolType ProtocolTypeI
 			{
 				get => this.IsProtocolTypeNull() ? System.Net.Sockets.ProtocolType.Tcp : (ProtocolType)this.ProtocolType;
