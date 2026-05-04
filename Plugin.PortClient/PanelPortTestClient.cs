@@ -20,7 +20,7 @@ namespace Plugin.PortClient
 		private const String Caption = "Port Test Client";
 		private PanelPortTestClientSettings _settings;
 
-		private PluginWindows Plugin => (PluginWindows)this.Window.Plugin;
+		private PluginWindows Plugin => (PluginWindows)this.Window.Plugin.Instance;
 
 		private IWindow Window => (IWindow)base.Parent;
 
