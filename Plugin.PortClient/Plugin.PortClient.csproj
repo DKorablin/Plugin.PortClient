@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net35;net8.0-windows</TargetFrameworks>
+		<TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
 		<UseWindowsForms>true</UseWindowsForms>
 		<OutputType>Library</OutputType>
 		<RootNamespace>Plugin.PortClient</RootNamespace>
@@ -11,7 +11,7 @@
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 		<CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
 		<NoWarn>CA1416</NoWarn>
-	<DefineConstants>WIN</DefineConstants>
+		<DefineConstants>WIN</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -41,12 +41,12 @@
 		<PackageTags>SAL;plugin;Network;Management;Administration;Port;Test</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Include="..\Bll.Shared\BllBase.cs" Link="Data\BllBase.cs" />
-	  <Compile Include="..\WinForms.Shared\SearchGrid\SearchGrid.cs" Link="UI\SearchGrid.cs" />
-	  <Compile Include="..\WinForms.Shared\SearchGrid\SearchGrid.Designer.cs" Link="UI\SearchGrid.Designer.cs" />
+		<Compile Include="..\Bll.Shared\BllBase.cs" Link="Data\BllBase.cs" />
+		<Compile Include="..\WinForms.Shared\SearchGrid\SearchGrid.cs" Link="UI\SearchGrid.cs" />
+		<Compile Include="..\WinForms.Shared\SearchGrid\SearchGrid.Designer.cs" Link="UI\SearchGrid.Designer.cs" />
 	</ItemGroup>
 	<ItemGroup>
-	  <EmbeddedResource Include="..\WinForms.Shared\SearchGrid\SearchGrid.resx" Link="UI\SearchGrid.resx" />
+		<EmbeddedResource Include="..\WinForms.Shared\SearchGrid\SearchGrid.resx" Link="UI\SearchGrid.resx" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -59,7 +59,22 @@
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="AlphaOmega.ObjectListView" />
-		<Reference Include="System.Design" Condition="'$(TargetFramework)'=='net35'" />
-		<Reference Include="System.Data.DataSetExtensions" Condition="'$(TargetFramework)'=='net35'" />
+		<Reference Include="System.Design" Condition="'$(TargetFramework)'=='net48'" />
+		<Reference Include="System.Data.DataSetExtensions" Condition="'$(TargetFramework)'=='net48'" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 	</ItemGroup>
 </Project>

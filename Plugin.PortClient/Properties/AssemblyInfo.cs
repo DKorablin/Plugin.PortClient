@@ -5,4 +5,3 @@ using System.Runtime.InteropServices;
 [assembly: System.CLSCompliant(true)]
 
 [assembly: AssemblyDescription("Ports/Sockets test client")]
-[assembly: AssemblyCopyright("Copyright © Danila Korablin 2017-2025")]

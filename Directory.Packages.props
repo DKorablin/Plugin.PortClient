@@ -4,7 +4,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageVersion Include="AlphaOmega.ObjectListView" Version="2.9.10" />
-		<PackageVersion Include="SAL.Windows" Version="1.2.11">
+		<PackageVersion Include="SAL.Windows" Version="1.2.12">
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageVersion>
 		<!--Analyzers-->
